@@ -83,3 +83,54 @@ This code adds b to b each loop until b is greater than or equal to a. We can as
 
 ### Step 3. The correct answer and reasoning:
 O(a/b). The variable count will eventually equal a/b. The while loop iterates count times. Therefore, it iterates a/b times.
+
+## 5. The following code computes the [integer] square root of a number. If the number is not a perfect square (there is no integer square root), then it returns -1. It does this by successive guessing. If n is 100, it first guesses 50. Too high? Try something lower - halfway betweek 1 and 50. What is its runtime?
+
+### Step 1. The problem:
+```
+int sqrt(int n)
+{
+	return sqrt_helper(n, 1, n);
+}
+
+int sqrt_helper(int n, int min, int max)
+{
+	if(max < min)
+		return -1; // no square root
+
+	int guess = (min + max) / 2;
+	if(guess * guess == n) // found it!
+		return guess;
+	else if (guess * guess < n) // too low
+		return sqrt_helper(n, guess + 1, max); // try higher
+	else if // too high
+		return sqrt_helper(n, min, guess - 1); // try lower
+}
+```
+
+### Step 2. The analysis:
+This code is a binary search algorithm. It progressively breaks down the problem at each step into half of the previous search space. The runtime is `O(log(n))`
+
+### Step 3. The correct answer and reasoning:
+O(log n). This algorithm is essentially doing a binary search to find the square root. Therefore the runtime is O(log n).
+
+## 6. The following code computes the [integer] square root of a number. If the number is not a perfect square (there is no integer square root), then it returns -1. It does this by trying increasingly large numbers until it find the right value (or is too high). What is its runtime?
+
+### Step 1. The problem:
+```
+int sqrt(int n)
+{
+	for(int guess = 1; guess * guess <= n; guess++)
+	{
+		if(guess * guess == n)
+			return guess;
+	}
+	return -1;
+}
+```
+
+### Step 2. The analysis:
+This will check through all perfect squares until it equals or is greater to n. The number of steps is equivalent to the square root of n. The runtime is `O(sqrt(n))`.
+
+### Step 3. The correct answer and reasoning:
+O(sqrt(n)). This is just a straightforward loop that stops when guess*guess > n (or in other words, when guess is > sqrt(n)).
