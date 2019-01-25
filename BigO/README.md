@@ -134,3 +134,25 @@ This will check through all perfect squares until it equals or is greater to n. 
 
 ### Step 3. The correct answer and reasoning:
 O(sqrt(n)). This is just a straightforward loop that stops when guess*guess > n (or in other words, when guess is > sqrt(n)).
+
+## 7. If a binary search tree is not balanced, how long might it take (worst case) to find an element in it?
+
+### Step 1. The problem:
+A binary search tree is a data structure consisting of nodes linked to other nodes by a parent -> child relationship (the parent has the links to the children, but usually not the other way around). The number of nodes and the number of links between nodes determines the height of the tree.
+
+### Step 2. The analysis:
+A non balanced binary search tree (BST) has no restrictions on the height of sub nodes. If it is not balanced, in the worst case, each node is linked to only one other node, making it a linked list. A linked list can also be looked at as a BST with height n (number of nodes). The search time is `O(n)`.
+
+### Step 3. The correct answer and reasoning:
+O(n), where n is the number of nodes in the tree. The max time to find an element is the depth tree. The tree could be a straight list downwards and have depth n.
+
+## 8. You are looking for a specific value in a binary tree, but the tree is not a binary search tree. What is the time complexity of this?
+
+### Step 1. The problem:
+The difference between a BST and a binary tree, is that the BST has a restriction on which values can be linked. Values less than the data in the current node must be linked to the left, and values greater than the data in the current node must be linked to the right.
+
+### Step 2. The analysis:
+Searching for an element in an unordered set of data can have the worst case time complexity of `O(n)` because in the worst case you may have to search through all the data to find the correct value. The best case is `O(1)`, the data you're searching for could be the root of the tree.
+
+### Step 3. The correct answer and reasoning:
+O(n). Without any ordering property on the nodes, we might have to search for all the nodes.
