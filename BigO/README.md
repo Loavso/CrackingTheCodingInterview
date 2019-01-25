@@ -156,3 +156,106 @@ Searching for an element in an unordered set of data can have the worst case tim
 
 ### Step 3. The correct answer and reasoning:
 O(n). Without any ordering property on the nodes, we might have to search for all the nodes.
+
+## 9. The appendToNew mehtod appends a value to an array by creating a new, longer array and returning this longer array. You've used the appendToNew method to create a copyArray function that repeatedly calls appendToNew. How long does copying an array take?
+
+### Step 1. The problem:
+```
+int[] copyArray(int[] array)
+{
+	int[] copy = new int[0];
+	for(int value : array)
+		copy = appendToNew(copy, value);
+	return copy;
+}
+
+int[] appendToNew(int[] array, int value)
+{
+	// copy all elements over to new array
+	int[] bigger = new int[array.length + 1];
+	for(int i = 0; i < array.length; i++)
+		bigger[i] = array[i];
+
+	// add new element
+	bigger[bigger.length - 1] = value;
+	return bigger;
+}
+```
+
+### Step 2. The analysis:
+The runtime of the copyArray function is multiplied by the time it takes to run appendToNew. The time it takes to run appendToNew is O(n), it runs through the length of the array to insert each element, as well as the time it takes to create the array, and add the last element, which are smaller constants. The copyArray function calls appendToNew n times: calling it once for each value in the array, and array lengths from 0 to n. This leaves us with a runtime of `O(n^2)`, because the sum of all runtimes from 0 to n is n(n+1)/2 (+0), simplified to n^2.
+
+### Step 3. The correct answer and reasoning:
+O(n^2) where n is the number of elements in the array. The first call to appendToNew takes 1 copy. The second call takes 2 copies. The third call takes 3 copies. And so on. The total time will be the sum of 1 through n, which is O(n^2).
+
+## 10. The following code sums the digits in a number. What is its big O time?
+
+### Step 1. The problem:
+```
+int sumDigits(int n)
+{
+	int sum = 0;
+	while(n > 0)
+	{
+		sum += n % 10;
+		n /= 10;
+	}
+	return sum;
+}
+```
+
+### Step 2. The analysis:
+The straightforward answer to this question is that the runtime is O(d), with d being the number of digits in the number. A more elaborate answer, is that if a number has d digits, the number will be at least 10^d, leaving us with `number <= 10^d`, or `log_10(number) = d`. This leaves us with a O(log_10(number)) runtime, or `O(log(n))`.
+
+### Step 3. The correct answer and reasoning:
+O(log(n)) the runtime will be the number of digits in the number. A number with d digits can have a value of up to 10^d. if n = 10^d, then d = log n. Therefore, the runtime is O(log n).
+
+## 11. The following code prints all strings of length k where the characters are in sorted order. It does this by generating all strings of length k and then checking if each is sorted. What is its runtime?
+
+### Step 1. The problem:
+```
+int numChars = 26;
+
+void printSortedStrings(int remaining)
+{
+	printSortedStrings(remaining, "");
+}
+
+void printSortedStrings(int remaining, String prefix)
+{
+	if(remaining == 0)
+	{
+		if(inOrder(prefix))
+		{
+			System.out.println(prefix);
+		}
+	}
+	else
+	{
+		for(int i = 0; i < numChars; i++)
+		{
+			char c = ithLetter(i);
+			printSortedStrings(remaining - 1, prefix + c);
+		}
+	}
+}
+
+boolean isInOrder(String s)
+{
+	for(int i = 1; i < s.length(); i++)
+	{
+		int prev = ithLetter(s.charAt(i - 1));
+		int curr = ithLetter(s.charAt(i));
+		if(prev > curr)
+			return false;
+	}
+	return true;
+}
+
+char ithLetter(int i)
+{
+	return (char)(((int)'a') + i);
+}
+```
+
+### Step 2. The analysis:
