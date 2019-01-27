@@ -133,7 +133,7 @@ int sqrt(int n)
 This will check through all perfect squares until it equals or is greater to n. The number of steps is equivalent to the square root of n. The runtime is `O(sqrt(n))`.
 
 ### Step 3. The correct answer and reasoning:
-O(sqrt(n)). This is just a straightforward loop that stops when guess*guess > n (or in other words, when guess is > sqrt(n)).
+O(sqrt(n)). This is just a straightforward loop that stops when guess * guess > n (or in other words, when guess is > sqrt(n)).
 
 ## 7. If a binary search tree is not balanced, how long might it take (worst case) to find an element in it?
 
@@ -259,3 +259,40 @@ char ithLetter(int i)
 ```
 
 ### Step 2. The analysis:
+The first thing to do is find the base function that all other runtimes are based off of. printSortedStrings calls an overloaded printSortedStrings which has a for loop that runs through every letter calls ithLetter to convert i to a character, followed by recursively calling printSortedStrings until remaining is exhausted. While the for loop is recursively calling until remaining = 0 it also adds each character in the alphabet to eventually be checked by inOrder.
+
+We can now start eliminating constant runtime functions from our calculations. ithLetter is a constant runtime function, as is the wrapper function printSortedStrings(int remaining).
+
+The next step is to look at the runtime of isInOrder, because it is the last call every time printSortedStrings is run, and will always be called by printSortedStrings. isInOrder is an O(k) function, where k is the length of the string. It calls ithLetter (a constant function), 2k times, with early termination if prev > curr.
+
+Now that we know the runtime of isInOrder, we can look at the runtime of the else statment within printSortedStrings for the second half of the runtime. The runtime is determined by the size of remaining (essentially the length of the string we want to check for being "in order", or k) and numChars, a constant. While remaining > 0 printSortedStrings is called 26 times, which will call printSortedStrings another 26 times, again and again until remaining reaches 0, an exponential function. Since each time the function is run we are guarenteed to have a O(k) function call we know the runtime is O(k * 26^k), or in more general terms, `O(k * a^k)`, where a is the size of the alphabet.
+
+### Step 3. The correct answer and reasoning:
+O(kc^k), where k is the length of the string and c is the number of characters in the alphabet. It takes O(c^k) time to generate each string. Then we need to check that each of these is sorted, which takes O(k) time.
+
+## 12. The following code computes the intersection (the number of elements in common) of two arrays. It assumes that neither array has duplicates. It computes the intersection by sorting one array (array b) and then iterating through array a by checking (via binary search) if each value is in b. What is its runtime?
+
+### Step 1. The problem:
+```
+int intersection(int[] a, int[] b)
+{
+	mergesort(b);
+	int intersect = 0;
+
+	for(int x : a)
+	{
+		if(binarySearch(b, x) >= 0)
+			intersect++;
+	}
+
+	return intersect;
+}
+```
+
+### Step 2. The analysis:
+The key to understanding this short function is knowing the runtime of mergesort, and binary search. Mergesort is an O(n log n) function, and binary search is a O(log n) function. Knowing this we can just apply those runtimes to this function, giving us O(b log(b)) runtime to sort an array of length b. Binary search is also run on an array of length b, giving us an O(log b) runtime, however binarysearch is run once for each int in a, giving us a O(a log(b)) runtime for the entire for loop.
+
+The final runtime is `O(b * log(b) + a * log(b))` because although we don't know the final runtime we know one will be the dominant runtime.
+
+### Step 3. The correct answer and reasoning:
+O(b log b + a log b). First we have to sort array b, which takes O(b log b) time. Then, for each element in a, we do binary search in O(log b) time. The second part takes O(a log b) time.
